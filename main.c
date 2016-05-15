@@ -15,13 +15,15 @@ int main(void)
     while (1) {
         // XOR on pin 4
 	if (PINB & (1<<PB3)){
-        	//PORTB ^= 1<<PB4;
+        	if ((PORTB & (1<<PB4)) == 0) {
+		_delay_ms(3000);
                 PORTB |= (1<<PB4);
                // _delay_ms(200);
+		}
        	}
         else {
-           PORTB &= ~(1<<PB4);
-         }
+                PORTB &= ~(1<<PB4);
+        }
 	//_delay_ms(msDelay);
 
     }
