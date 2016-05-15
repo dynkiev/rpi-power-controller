@@ -3,28 +3,33 @@
  
 int main(void)
 {
-//    const int msDelay = 1000;
+    //PB3 - output to raspberry reset
+    //PB4 - input from raspberry GPIO
+    DDRB  |= (1<<PB3);
+    PORTB |= (1<<PB4) | (1<<PB3);
  
-    // PortB pin4 to output (set bit to 1 using SHL)
-    //DDRB = 1<<DDB4;
-    DDRB  |= (1<<PB4);
+    _delay_ms(4*1000);
  
-    // PortB to low
-    PORTB |= (1<<PB3);
- 
+    int check_count = 0;
     while (1) {
-        // XOR on pin 4
-	if (PINB & (1<<PB3)){
-        	if ((PORTB & (1<<PB4)) == 0) {
-		_delay_ms(3000);
-                PORTB |= (1<<PB4);
-               // _delay_ms(200);
-		}
-       	}
-        else {
-                PORTB &= ~(1<<PB4);
-        }
-	//_delay_ms(msDelay);
+       //if button pressed
+       if ((PINB & (1<<PB4)) == 0) {
+          check_count = 0;
+          _delay_ms(100);
+       }
+       else {
+         check_count++;
+         _delay_ms(100);
+       };
+       if (check_count > 50) {
+         //reset
+         PORTB &= ~(1<<PB3);
+         _delay_ms(500);
+         PORTB |= (1<<PB3);
+         //prepare for initial status
+         check_count=0;
+         _delay_ms(4*1000);
+       }
 
     }
  
