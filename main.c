@@ -5,8 +5,7 @@ int main(void)
 {
     //PB3 - output to raspberry reset
     //PB4 - input from raspberry GPIO
-    DDRB  |= (1<<PB3);
-    PORTB |= (1<<PB4) | (1<<PB3);
+    PORTB |= (1<<PB4);
  
     _delay_ms(4*1000);    //initial delay for boot
 
@@ -26,9 +25,9 @@ int main(void)
        }
        if (check_count > 50) {    //watchdow time, *0,1 ms
          //reset
-         PORTB &= ~(1<<PB3);
+         DDRB  |= (1<<PB3);
          _delay_ms(500);         //reset pulse width
-         PORTB |= (1<<PB3);
+         DDRB  &= ~(1<<PB3);
          //prepare for initial status
          check_count=0;
          _delay_ms(4*1000);   //initial delay to boot
